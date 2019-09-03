@@ -1,28 +1,16 @@
-import numpy
+qnt_idas = int(input())
+for i in range(qnt_idas):
+	nro_produtos = int(input())
+	produtos_dicionario = {}
+	total = 0.00
+	for j in range(nro_produtos):
+		produto = input().split()
+		produtos_dicionario[produto[0]] = produto[1] # Dicionário com nome - valor do produto
+	nro_compras = int(input())
+	for _ in range(nro_compras):
+		produto_a_ser_comprado = input().strip().split()
+		valor_produto = produtos_dicionario[produto_a_ser_comprado[0]]
+		total = total + (float(valor_produto) * float(produto_a_ser_comprado[1]))
+	print("R$ {:.2f}".format(total))
+		
 
-nroCasos = int(input())
-total = 0
-for caso in range(0, nroCasos):
-	nroProdutos = int(input())
-	i = 0
-	produtosDicionario = numpy.empty(nroProdutos, dtype=object)
-	for i in range(0, nroProdutos):
-		produto = input()
-		arrayProduto = produto.split(" ", 1)
-		print(arrayProduto)
-		produtosDicionario[i] = {
-			arrayProduto[0] : arrayProduto[1]
-		}
-		print(produtosDicionario[i])
-	i = 0
-	nroProdutosASeremComprados = int(input())
-	produtoASerCompradoDicionario = numpy.empty(nroProdutosASeremComprados, dtype=object)
-	for produtoASerComprado in range(0, nroProdutosASeremComprados):
-		produtoASerComprado = input()
-		arrayProdutoASerComprado = produtoASerComprado.split(" ", 1) # Separa o produto a partir do primeiro espaço
-		# se o nome do produto tiver espaço já era
-		produtoASerCompradoDicionario[i] = {
-			arrayProdutoASerComprado[0] : arrayProdutoASerComprado[1]
-		}
-		i = i + 1
-		print(produtoASerCompradoDicionario[0])
