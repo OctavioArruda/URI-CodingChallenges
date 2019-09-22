@@ -1,0 +1,1 @@
+                if (mem.empty()) cout << "" << endl; return;

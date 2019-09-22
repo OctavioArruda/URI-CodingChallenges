@@ -2,96 +2,125 @@
 
 using namespace std;
 
-/* 5 x 5 maze
-0 1 2 3 4 
-x x x x x 0
-x x x x x 1 
-x x x x x 2 
-x x x x x 3
-x x x x x 4
-*/
-int maze[4][4];
-
-int value(int i, int j)
+class Coordinate
 {
-	return i >= 0 && i < 5 && j >= 0 && j < 5;
-}
+public:
+	int x, y;
+	bool visited;
+};
 
-void backtrack(int i, int j, vector<int> prev)
+int result = 0;
+
+void backtrack(vector<vector <int> > maze, int i, int j, vector<vector <Coordinate> > coordinates, stack<Coordinate> mem)
 {
-	// when next call isn't a valid position to continue:
-	// robber's wins
-	if (maze[i][j]) return;
-	// If the path to walk is out of the range:
-	// robber's wins
-	if (!value(i, j)) return;
-	// if the last position was reached(cop's wins):
-	if (prev[5 * i + j]) return;
+    //std::cout << "after stack thing recursion" << endl;
+    // if we are inside the ranges of maze and we have a possible solution and a possible start
+    // for cops
+	if (i >= 0 && i < 5 && j >= 0 && j < 5 && !result && !maze[4][4] && !maze[0][0])
+    {
+        coordinates[i][j].visited = true;
+        cout << "debugging -> i: "<< i << " j:" << j << endl;
+        cout << "debugging coordinates --> x: " << coordinates[i][j].x << " y: " << coordinates[i][j].y << endl;
+        /*
+        Tuple with steps in a stack.
+        When in a deadlock in maze, pop the steps in stack until reach
+        some position which can be walked too,
+        or an end-game.
+        */
+        mem.push(coordinates[i][j]);
 
-	// Mark it as previously visited
-	prev[5 * i + j] = 1;
-
-	if (i + 1 < 5 && maze[i + 1][j] == 0) 
-	{
-		// down		
-		maze[i][j] ==  1;
-		backtrack(++i, j, prev);
-	}
-	if (j + 1 < 5 && maze[i][j + 1] == 0) 
-	{
-		// right
-		maze[i][j] == 1;
-		backtrack(i, ++j, prev);
-	}
-	if (j - 1 >= 0 && maze[i][j - 1] == 0) 
-	{
-		// left
-		maze[i][j] == 1;
-		backtrack(i, --j, prev);
-	}
-	if (i - 1 >= 0 && maze[i - 1][j] == 0) 
-	{
-		// above 
-		maze[i][j] == 1;
-		backtrack(--i, j, prev);
-	}
-	if (i == 4 && j == 4) 
-	{
-		return;
-	}
-
-	return;
+        if(i == 4 && j == 4)
+        {
+            result = 1;
+            return;
+        }
+        else
+        {
+            if (j + 1 < 5 && maze[i][j + 1] == 0 && !coordinates[i][j + 1].visited)
+            {
+                // right
+                j = j + 1;                
+                backtrack(maze, i, j, coordinates, mem);
+            }
+            else if (i + 1 < 5 && maze[i + 1][j] == 0 && !coordinates[i + 1][j].visited)
+            {
+                // down
+                i = i + 1;
+                backtrack(maze, i, j, coordinates, mem);
+            }
+            else if (j - 1 >= 0 && maze[i][j - 1] == 0 && !coordinates[i][j - 1].visited)
+            {
+                // left
+                j = j - 1;                
+                backtrack(maze, i, j, coordinates, mem);
+            }
+            else if (i - 1 >= 0 && maze[i - 1][j] == 0 && !coordinates[i - 1][j].visited)
+            {
+                // above
+                i = i - 1;
+                backtrack(maze, i, j, coordinates, mem);
+            }
+            else
+            {
+                cout << "the stack thing" << endl;
+                // If there's no move to do, pop the stack until we have a new move
+                mem.pop();
+                cout << "no pop? stack thing" << endl;
+                if (mem.empty()) cout << "XDD"; return;
+                cout << "no empty? stack thing" << endl;
+                coordinates[i][j] = mem.top();
+                cout << "no top? stack thing" << endl;
+                cout << " after stack --> x: " << coordinates[i][j].x << " y: " << coordinates[i][j].y << endl;
+                backtrack(maze, coordinates[i][j].x, coordinates[i][j].y, coordinates, mem);
+            }
+        }
+    }
 }
 
 int main()
 {
-    int nCasos;
-    //ios_base::sync_with_stdio(0); cin.tie(0);
-	cin >> nCasos;
-    vector<int> prev;
+    int T;
+    ios_base :: sync_with_stdio(0); cin.tie(0);
+	cin >> T;
 
-	while (nCasos--)
-	{	
-		for (int i = 0; i < 5; ++i) 
+	while (T--)
+	{
+	    vector<vector <Coordinate> > coordinates(5);
+	    vector<vector <int> > maze(5);
+
+		for(int i = 0; i < 5; i++)
 		{
-			for (int j = 0; j < 5; ++j) 
-			{					
-				cin >> maze[i][j];
+		    maze[i].resize(5);
+			coordinates[i].resize(5);
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+			    cin >> maze[i][j];
+
+				coordinates[i][j].x = i;
+				coordinates[i][j].y = j;
+				coordinates[i][j].visited = false;
 			}
-		} 
+		}
 
-		prev.assign(24, 0);
-
-		backtrack(0,0, prev);
+        result = 0;
+        stack<Coordinate> mem;
+		backtrack(maze, 0, 0, coordinates, mem);
+        //cout << "out of backtrack" << endl;
 
         // If cops reach the last maze position they've won ;
-		if (prev[24])
+		if (result)
         {
-            cout << "COPS\n";
+            cout << "COPS" << endl;
 		}
 		else
         {
-            cout << "ROBBERS\n";
+            cout << "ROBBERS" << endl;
         }
 	}
+
+	return 0;
 }
