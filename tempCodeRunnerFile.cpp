@@ -1,1 +1,1 @@
-                if (mem.empty()) cout << "" << endl; return;
+        cout << "done reading" << endl;
