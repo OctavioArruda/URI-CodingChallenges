@@ -8,7 +8,7 @@ int go(string &a, string &b) {
   int top = min(a.size(), b.size());
   int ans = 0;
 
-  for (int i = 0; i < top; ++i)
+  for (int i = 0; i < top; i++)
   {
     ans += a[i] != b[i];
   }
@@ -25,7 +25,7 @@ int main(int argc, char *argv[ ]) {
   while (cin >> x >> k) {
     int best = 111, index_best = -1;
 
-    for (int i = 0; i < 5; ++i) 
+    for (int i = 0; i < 5; i++) 
     {
       string line; 
       cin >> line;
