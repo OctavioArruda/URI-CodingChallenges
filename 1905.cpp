@@ -33,7 +33,7 @@ void backtrack(vector<vector <int> > maze, int i, int j, vector<vector <Coordina
             if (j + 1 < 5 && maze[i][j + 1] == 0 && !coordinates[i][j + 1].visited)
             {
                 // right
-                j = j + 1;                
+                j = j + 1;
                 backtrack(maze, i, j, coordinates, steps_mem);
             }
             else if (i + 1 < 5 && maze[i + 1][j] == 0 && !coordinates[i + 1][j].visited)
@@ -45,7 +45,7 @@ void backtrack(vector<vector <int> > maze, int i, int j, vector<vector <Coordina
             else if (j - 1 >= 0 && maze[i][j - 1] == 0 && !coordinates[i][j - 1].visited)
             {
                 // left
-                j = j - 1;                
+                j = j - 1;
                 backtrack(maze, i, j, coordinates, steps_mem);
             }
             else if (i - 1 >= 0 && maze[i - 1][j] == 0 && !coordinates[i - 1][j].visited)
