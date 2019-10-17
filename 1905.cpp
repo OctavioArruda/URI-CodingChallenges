@@ -1,16 +1,15 @@
 #include <bits/stdc++.h>
+#define D(x) cout << #x " = " << (x) << endl
+#define endl '\n'
 
 using namespace std;
 
-class Coordinate
-{
-public:
-	int x, y;
-	bool visited;
-};
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, -1, 1};
 
-int result = 0;
+bool dfs(vector<vector<int>> &maze, vector<vector<int>> &visited, int x, int y) {
 
+<<<<<<< HEAD
 void backtrack(vector<vector <int> > maze, int i, int j, vector<vector <Coordinate> > coordinates, stack<Coordinate> steps_mem)
 {
     //std::cout << "after stack thing recursion" << endl;
@@ -102,40 +101,45 @@ int main()
 	{
 	    vector<vector <Coordinate> > coordinates(5);
 	    vector<vector <int> > maze(5);
+=======
+  visited[x][y] = true;
+>>>>>>> 893089eec15ddad97210c77a28c7fb2df99097ab
 
-		for(int i = 0; i < 5; i++)
-		{
-		    maze[i].resize(5);
-			coordinates[i].resize(5);
-		}
+  if (x == 4 && y == 4)
+  {
+    return true;
+  }
 
-		for (int i = 0; i < 5; i++)
-		{
-			for (int j = 0; j < 5; j++)
-			{   
-			    cin >> maze[i][j];
+  int ok = 0;
+  for (int i = 0; i < 4; ++i) 
+  {
+    int nx = x + dx[i], ny = y + dy[i];
 
-				coordinates[i][j].x = i;
-				coordinates[i][j].y = j;
-				coordinates[i][j].visited = false;
-			}
-		}
+    if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5 && !visited[nx][ny] && maze[nx][ny] == 0) 
+    {
+      ok |= dfs(maze, visited, nx, ny);
+    }
+  }
+  return ok;
+}
+int main() {
+  ios_base::sync_with_stdio(false);cin.tie(NULL);
+  int tc;
+  cin >> tc;
+  
+  while (tc--) 
+  {
+    vector<vector<int>> maze(5, vector<int>(5));
+    for (auto &i : maze)
+      for (auto &j : i)
+        cin >> j;
 
-        result = 0;
-        stack<Coordinate> steps_mem;
-		backtrack(maze, 0, 0, coordinates, steps_mem);
-        //cout << "out of backtrack" << endl;
+    vector<vector<int>> visited(5, vector<int>(5));
 
-        // If cops reach the last maze position they've won ;
-		if (result)
-        {
-            cout << "COPS" << endl;
-		}
-		else
-        {
-            cout << "ROBBERS" << endl;
-        }
-	}
-
-	return 0;
+    if (dfs(maze, visited, 0, 0))
+      cout << "COPS" << endl;
+    else
+      cout << "ROBBERS" << endl;
+  }
+  return 0;
 }
